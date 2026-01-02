@@ -1,4 +1,7 @@
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { ArrowRight, Phone, FileText, ClipboardCheck, RefreshCw } from 'lucide-react';
+import ScrollReveal from './ScrollReveal';
 
 const oldFeatures = [
   {
@@ -47,11 +50,14 @@ const newFeatures = [
 ];
 
 const NewAuthorisationComparison = () => {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+
   return (
-    <section className="new-authorisation-section new-authorisation-comparison bg-background">
+    <section className="new-authorisation-section new-authorisation-comparison bg-background" ref={sectionRef}>
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <ScrollReveal className="text-center mb-12">
           <span className="new-authorisation-badge mb-4">Policy Evolution 2025</span>
           <h2 className="new-authorisation-section-title mt-4">
             Policy Comparison: Old vs New
@@ -60,13 +66,18 @@ const NewAuthorisationComparison = () => {
             Review the comprehensive changes in our updated policy framework. These modifications are designed to 
             streamline processes and enhance user experience.
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Comparison Layout */}
         <div className="new-authorisation-comparison-layout relative">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16">
             {/* Old System */}
-            <div className="new-authorisation-comparison-old">
+            <motion.div 
+              className="new-authorisation-comparison-old"
+              initial={{ opacity: 0, x: -50 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: 0.2, duration: 0.6 }}
+            >
               <div className="new-authorisation-card overflow-hidden">
                 <div className="bg-gradient-to-r from-orange-500 to-orange-400 px-6 py-4">
                   <h3 className="text-white font-semibold text-lg">Saral Sanchar (Existing)</h3>
@@ -75,7 +86,13 @@ const NewAuthorisationComparison = () => {
                   {oldFeatures.map((feature, index) => {
                     const Icon = feature.icon;
                     return (
-                      <div key={index} className="flex gap-4">
+                      <motion.div 
+                        key={index} 
+                        className="flex gap-4"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={isInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
+                      >
                         <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
                           <Icon className="w-5 h-5 text-orange-500" />
                         </div>
@@ -83,22 +100,37 @@ const NewAuthorisationComparison = () => {
                           <h4 className="font-medium text-foreground text-sm">{feature.title}</h4>
                           <p className="text-xs text-muted-foreground mt-1">{feature.description}</p>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Center Arrow */}
-            <div className="new-authorisation-comparison-arrow hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+            <motion.div 
+              className="new-authorisation-comparison-arrow hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ delay: 0.5, duration: 0.5, type: 'spring' }}
+            >
               <div className="w-16 h-16 rounded-full new-authorisation-gradient-primary flex items-center justify-center shadow-new-authorisation-glow">
-                <ArrowRight className="w-8 h-8 text-white" />
+                <motion.div
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                >
+                  <ArrowRight className="w-8 h-8 text-white" />
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
 
             {/* New System */}
-            <div className="new-authorisation-comparison-new">
+            <motion.div 
+              className="new-authorisation-comparison-new"
+              initial={{ opacity: 0, x: 50 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
               <div className="new-authorisation-card overflow-hidden border-2 border-new-authorisation-purple/20">
                 <div className="new-authorisation-gradient-primary px-6 py-4">
                   <h3 className="text-white font-semibold text-lg">Authorisation Rules 2025</h3>
@@ -107,7 +139,13 @@ const NewAuthorisationComparison = () => {
                   {newFeatures.map((feature, index) => {
                     const Icon = feature.icon;
                     return (
-                      <div key={index} className="flex gap-4">
+                      <motion.div 
+                        key={index} 
+                        className="flex gap-4"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={isInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ delay: 0.4 + index * 0.1, duration: 0.4 }}
+                      >
                         <div className="w-10 h-10 rounded-lg bg-new-authorisation-lavender flex items-center justify-center flex-shrink-0">
                           <Icon className="w-5 h-5 text-new-authorisation-purple" />
                         </div>
@@ -115,20 +153,25 @@ const NewAuthorisationComparison = () => {
                           <h4 className="font-medium text-foreground text-sm">{feature.title}</h4>
                           <p className="text-xs text-muted-foreground mt-1">{feature.description}</p>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Mobile Arrow */}
-          <div className="lg:hidden flex justify-center -my-4 relative z-10">
+          <motion.div 
+            className="lg:hidden flex justify-center -my-4 relative z-10"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.4, duration: 0.4 }}
+          >
             <div className="w-12 h-12 rounded-full new-authorisation-gradient-primary flex items-center justify-center shadow-lg rotate-90">
               <ArrowRight className="w-6 h-6 text-white" />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

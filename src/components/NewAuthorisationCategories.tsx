@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { 
   Radio, 
   Settings, 
@@ -8,6 +9,7 @@ import {
   ArrowRight,
   CheckCircle2
 } from 'lucide-react';
+import ScrollReveal from './ScrollReveal';
 
 const tabs = [
   { 
@@ -156,51 +158,85 @@ const categoryContent: Record<string, {
 
 const NewAuthorisationCategories = () => {
   const [activeTab, setActiveTab] = useState('main');
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
   return (
-    <section className="new-authorisation-section new-authorisation-categories bg-muted/30">
+    <section className="new-authorisation-section new-authorisation-categories bg-muted/30" ref={sectionRef}>
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <ScrollReveal className="text-center mb-12">
           <h2 className="new-authorisation-section-title">
             Categories of Authorisations
           </h2>
           <p className="new-authorisation-section-subtitle">
             Comprehensive range of telecommunication authorisation and licenses for all types of services
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Tabs Layout */}
         <div className="new-authorisation-categories-layout grid lg:grid-cols-[280px_1fr] gap-8">
           {/* Vertical Tab List */}
-          <div className="new-authorisation-categories-tabs space-y-2">
-            {tabs.map((tab) => {
+          <motion.div 
+            className="new-authorisation-categories-tabs space-y-2"
+            initial={{ opacity: 0, x: -30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            {tabs.map((tab, index) => {
               const Icon = tab.icon;
               return (
-                <button
+                <motion.button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`new-authorisation-tab ${activeTab === tab.id ? 'active' : ''}`}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
+                  whileHover={{ x: 5 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <Icon className="w-5 h-5 flex-shrink-0" />
                   <div className="text-left">
                     <div className="font-medium text-sm">{tab.label}</div>
                     {activeTab === tab.id && (
-                      <div className="text-xs opacity-80 mt-1">{tab.description}</div>
+                      <motion.div 
+                        className="text-xs opacity-80 mt-1"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {tab.description}
+                      </motion.div>
                     )}
                   </div>
-                </button>
+                </motion.button>
               );
             })}
-          </div>
+          </motion.div>
 
           {/* Tab Content */}
-          <div className="new-authorisation-categories-content">
-            <div className="grid md:grid-cols-2 gap-6">
+          <motion.div 
+            className="new-authorisation-categories-content"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            <motion.div 
+              className="grid md:grid-cols-2 gap-6"
+              key={activeTab}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
               {categoryContent[activeTab]?.cards.map((card, index) => (
-                <div 
+                <motion.div 
                   key={index}
                   className="new-authorisation-card new-authorisation-card-hover p-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.4 }}
+                  whileHover={{ y: -5 }}
                 >
                   <h3 className="font-semibold text-foreground mb-4 new-authorisation-gradient-text">
                     {card.title}
@@ -220,19 +256,24 @@ const NewAuthorisationCategories = () => {
                     {card.link}
                     <ArrowRight className="w-4 h-4" />
                   </a>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Reference Document */}
-            <div className="mt-8 p-4 bg-new-authorisation-lavender rounded-lg border border-new-authorisation-purple/20">
+            <motion.div 
+              className="mt-8 p-4 bg-new-authorisation-lavender rounded-lg border border-new-authorisation-purple/20"
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.8, duration: 0.4 }}
+            >
               <p className="text-xs text-muted-foreground mb-1">Reference Document</p>
               <p className="text-sm font-medium text-foreground">
                 Miscellaneous Telecomm. Gazette notification of Draft Telecommunications.pdf
               </p>
               <p className="text-xs text-muted-foreground mt-1">Updated for latest format</p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>
