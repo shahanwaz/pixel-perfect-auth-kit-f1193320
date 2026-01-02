@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        inter: ['Inter', 'system-ui', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -57,6 +60,17 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        "new-authorisation": {
+          purple: "hsl(var(--new-authorisation-purple))",
+          blue: "hsl(var(--new-authorisation-blue))",
+          indigo: "hsl(var(--new-authorisation-indigo))",
+          lavender: "hsl(var(--new-authorisation-lavender))",
+          "gray-light": "hsl(var(--new-authorisation-gray-light))",
+          "gray-text": "hsl(var(--new-authorisation-gray-text))",
+          dark: "hsl(var(--new-authorisation-dark))",
+          orange: "hsl(var(--new-authorisation-orange))",
+          cyan: "hsl(var(--new-authorisation-cyan))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,25 +79,34 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "new-authorisation-pulse": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+        },
+        "new-authorisation-bounce": {
+          "0%, 100%": { transform: "translateY(-5%)", animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)" },
+          "50%": { transform: "translateY(0)", animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "new-authorisation-pulse": "new-authorisation-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "new-authorisation-bounce": "new-authorisation-bounce 1s infinite",
+      },
+      boxShadow: {
+        "new-authorisation-sm": "0 2px 8px rgba(0, 0, 0, 0.06)",
+        "new-authorisation-md": "0 4px 16px rgba(0, 0, 0, 0.08)",
+        "new-authorisation-lg": "0 8px 32px rgba(0, 0, 0, 0.1)",
+        "new-authorisation-xl": "0 16px 48px rgba(0, 0, 0, 0.12)",
+        "new-authorisation-glow": "0 0 40px rgba(99, 102, 241, 0.3)",
       },
     },
   },
