@@ -175,7 +175,7 @@ const NewAuthorisationCategories = () => {
         </ScrollReveal>
 
         {/* Tabs Layout */}
-        <div className="new-authorisation-categories-layout grid lg:grid-cols-[280px_1fr] gap-8">
+        <div className="new-authorisation-categories-layout grid lg:grid-cols-[380px_1fr] gap-0">
           {/* Vertical Tab List */}
           <motion.div 
             className="new-authorisation-categories-tabs space-y-2"
@@ -196,7 +196,7 @@ const NewAuthorisationCategories = () => {
                   whileHover={{ x: 5 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Icon className="w-5 h-5 flex-shrink-0" />
+                  <Icon className="w-5 h-5 flex-shrink-0 self-start mt-0.5" />
                   <div className="text-left">
                     <div className="font-medium text-sm">{tab.label}</div>
                     {activeTab === tab.id && (
@@ -217,7 +217,7 @@ const NewAuthorisationCategories = () => {
 
           {/* Tab Content */}
           <motion.div 
-            className="new-authorisation-categories-content"
+            className="new-authorisation-categories-content bg-white rounded-r-2xl p-6 shadow-new-authorisation-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.4, duration: 0.5 }}

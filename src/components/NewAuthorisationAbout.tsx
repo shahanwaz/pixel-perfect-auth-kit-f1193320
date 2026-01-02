@@ -94,7 +94,7 @@ const NewAuthorisationAbout = () => {
               {/* Floating Feature Cards */}
               {featureCards.map((feature, index) => {
                 const positions = [
-                  { top: '5%', right: '15%' },
+                  { top: '5%', left: '0' },
                   { top: '15%', right: '-5%' },
                   { top: '45%', right: '-10%' },
                   { bottom: '15%', right: '0%' },

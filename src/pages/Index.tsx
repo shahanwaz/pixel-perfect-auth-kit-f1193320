@@ -29,13 +29,6 @@ const Index = () => {
       
       {/* FAQ Section */}
       <NewAuthorisationFAQ />
-      
-      {/* Footer placeholder */}
-      <footer className="new-authorisation-footer py-8 bg-foreground text-background/80">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-sm">© 2025 Authorisation Portal. Department of Telecommunications, Government of India.</p>
-        </div>
-      </footer>
     </div>
   );
 };
