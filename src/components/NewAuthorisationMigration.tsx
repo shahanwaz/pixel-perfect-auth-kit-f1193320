@@ -1,4 +1,7 @@
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Calendar, FileCheck, CreditCard, Settings, AlertCircle } from 'lucide-react';
+import ScrollReveal from './ScrollReveal';
 
 const migrationCards = [
   {
@@ -56,11 +59,14 @@ const migrationCards = [
 ];
 
 const NewAuthorisationMigration = () => {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+
   return (
-    <section className="new-authorisation-section new-authorisation-migration bg-muted/30">
+    <section className="new-authorisation-section new-authorisation-migration bg-muted/30" ref={sectionRef}>
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <ScrollReveal className="text-center mb-12">
           <h2 className="new-authorisation-section-title">
             Migration of License to Authorisation
           </h2>
@@ -68,23 +74,31 @@ const NewAuthorisationMigration = () => {
             Migrating to the new authorisation portal brings a unified login with stronger security, faster access control 
             and drastically reduced admin overhead
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Cards Grid */}
         <div className="new-authorisation-migration-grid grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {migrationCards.map((card, index) => {
             const Icon = card.icon;
             return (
-              <div 
+              <motion.div 
                 key={index}
                 className={`new-authorisation-card new-authorisation-card-hover p-6 ${
                   index === 4 ? 'md:col-span-2 lg:col-span-1' : ''
                 }`}
+                initial={{ opacity: 0, y: 40 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.1 + index * 0.1, duration: 0.5 }}
+                whileHover={{ y: -8, transition: { duration: 0.2 } }}
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="new-authorisation-icon-wrapper">
+                  <motion.div 
+                    className="new-authorisation-icon-wrapper"
+                    whileHover={{ rotate: 10, scale: 1.1 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
                     <Icon className="w-5 h-5" />
-                  </div>
+                  </motion.div>
                   <span className="text-4xl font-bold text-muted/50">{card.number}</span>
                 </div>
                 
@@ -98,17 +112,26 @@ const NewAuthorisationMigration = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             );
           })}
         </div>
 
         {/* CTA Button */}
-        <div className="text-center mt-10">
-          <button className="new-authorisation-btn-primary px-8">
+        <motion.div 
+          className="text-center mt-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.8, duration: 0.4 }}
+        >
+          <motion.button 
+            className="new-authorisation-btn-primary px-8"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+          >
             View Details
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     </section>
   );

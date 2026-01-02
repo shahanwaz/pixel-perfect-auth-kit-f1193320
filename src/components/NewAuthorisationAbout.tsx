@@ -1,13 +1,16 @@
 import { Shield, Zap, Monitor, Lock, Eye, Clock } from 'lucide-react';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 import aboutVisual from '@/assets/new-authorisation-about-visual.png';
+import ScrollReveal from './ScrollReveal';
 
 const featureCards = [
   { icon: Shield, label: 'Unified Framework', delay: 0 },
-  { icon: Zap, label: 'Simplified Authorisation', delay: 1 },
-  { icon: Monitor, label: 'Digital Process', delay: 2 },
-  { icon: Lock, label: 'Security Framework', delay: 3 },
-  { icon: Eye, label: 'Transparent System', delay: 4 },
-  { icon: Clock, label: 'Time-bound Approval', delay: 5 },
+  { icon: Zap, label: 'Simplified Authorisation', delay: 0.1 },
+  { icon: Monitor, label: 'Digital Process', delay: 0.2 },
+  { icon: Lock, label: 'Security Framework', delay: 0.3 },
+  { icon: Eye, label: 'Transparent System', delay: 0.4 },
+  { icon: Clock, label: 'Time-bound Approval', delay: 0.5 },
 ];
 
 const categories = [
@@ -18,12 +21,15 @@ const categories = [
 ];
 
 const NewAuthorisationAbout = () => {
+  const visualRef = useRef(null);
+  const isVisualInView = useInView(visualRef, { once: true, amount: 0.3 });
+
   return (
     <section id="about" className="new-authorisation-section new-authorisation-about bg-background">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Column - Text Content */}
-          <div className="new-authorisation-about-content">
+          <ScrollReveal variant="fadeLeft" className="new-authorisation-about-content">
             <h2 className="new-authorisation-section-title">
               About Authorisation Portal
             </h2>
@@ -41,35 +47,48 @@ const NewAuthorisationAbout = () => {
 
             <ul className="new-authorisation-about-categories space-y-2 mb-8">
               {categories.map((category, index) => (
-                <li 
+                <motion.li 
                   key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.4 }}
                   className="flex items-start gap-3 text-muted-foreground"
                 >
                   <span className="w-2 h-2 rounded-full new-authorisation-gradient-primary mt-2 flex-shrink-0" />
                   {category}
-                </li>
+                </motion.li>
               ))}
             </ul>
 
             {/* CTA Buttons */}
-            <div className="new-authorisation-about-buttons flex flex-wrap gap-4">
+            <motion.div 
+              className="new-authorisation-about-buttons flex flex-wrap gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, duration: 0.4 }}
+            >
               <button className="new-authorisation-btn-primary">
                 Read More
               </button>
               <button className="new-authorisation-btn-secondary">
                 <span>Get Started</span>
               </button>
-            </div>
-          </div>
+            </motion.div>
+          </ScrollReveal>
 
           {/* Right Column - Visual */}
-          <div className="new-authorisation-about-visual relative">
+          <div className="new-authorisation-about-visual relative" ref={visualRef}>
             {/* Background Image */}
             <div className="relative w-full aspect-square max-w-lg mx-auto">
-              <img 
+              <motion.img 
                 src={aboutVisual} 
                 alt="About Authorisation Portal" 
                 className="w-full h-full object-contain"
+                initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+                animate={isVisualInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
+                transition={{ duration: 0.8, ease: 'easeOut' }}
               />
               
               {/* Floating Feature Cards */}
@@ -86,10 +105,18 @@ const NewAuthorisationAbout = () => {
                 const Icon = feature.icon;
                 
                 return (
-                  <div
+                  <motion.div
                     key={feature.label}
-                    className={`new-authorisation-feature-card absolute new-authorisation-glass new-authorisation-card-hover rounded-xl px-4 py-3 flex items-center gap-3 new-authorisation-float new-authorisation-float-delay-${feature.delay % 3}`}
+                    className="new-authorisation-feature-card absolute new-authorisation-glass new-authorisation-card-hover rounded-xl px-4 py-3 flex items-center gap-3 new-authorisation-float"
                     style={pos as React.CSSProperties}
+                    initial={{ opacity: 0, scale: 0, y: 20 }}
+                    animate={isVisualInView ? { opacity: 1, scale: 1, y: 0 } : {}}
+                    transition={{ 
+                      delay: 0.3 + feature.delay, 
+                      duration: 0.5,
+                      type: 'spring',
+                      stiffness: 200
+                    }}
                   >
                     <div className="new-authorisation-icon-wrapper">
                       <Icon className="w-5 h-5" />
@@ -97,7 +124,7 @@ const NewAuthorisationAbout = () => {
                     <span className="text-sm font-medium text-foreground whitespace-nowrap">
                       {feature.label}
                     </span>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>

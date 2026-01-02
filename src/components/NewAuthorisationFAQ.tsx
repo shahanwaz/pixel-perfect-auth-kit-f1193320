@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Search, Plus, Minus, HelpCircle } from 'lucide-react';
+import ScrollReveal from './ScrollReveal';
 
 const faqs = [
   {
@@ -43,6 +45,8 @@ const faqs = [
 const NewAuthorisationFAQ = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
   const filteredFaqs = faqs.filter(faq => 
     faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -50,10 +54,10 @@ const NewAuthorisationFAQ = () => {
   );
 
   return (
-    <section className="new-authorisation-section new-authorisation-faq bg-background">
+    <section className="new-authorisation-section new-authorisation-faq bg-background" ref={sectionRef}>
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <ScrollReveal className="text-center mb-12">
           <h2 className="new-authorisation-section-title new-authorisation-gradient-text">
             Frequently Asked Questions
           </h2>
@@ -61,10 +65,15 @@ const NewAuthorisationFAQ = () => {
             Find answers to common questions about telecom licensing, compliance standards, and service portal 
             usage. Can't find what you're looking for? Contact our support team.
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Search Input */}
-        <div className="new-authorisation-faq-search max-w-2xl mx-auto mb-10">
+        <motion.div 
+          className="new-authorisation-faq-search max-w-2xl mx-auto mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
@@ -75,62 +84,88 @@ const NewAuthorisationFAQ = () => {
               className="w-full pl-12 pr-4 py-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-new-authorisation-purple/50 focus:border-new-authorisation-purple transition-all"
             />
           </div>
-        </div>
+        </motion.div>
 
         {/* FAQ Accordion */}
         <div className="new-authorisation-faq-list max-w-3xl mx-auto space-y-3">
-          {filteredFaqs.map((faq) => (
-            <div
+          {filteredFaqs.map((faq, index) => (
+            <motion.div
               key={faq.id}
               className="new-authorisation-card overflow-hidden"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.3 + index * 0.08, duration: 0.4 }}
             >
-              <button
+              <motion.button
                 onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}
                 className="new-authorisation-accordion-trigger"
+                whileHover={{ backgroundColor: 'hsl(var(--muted) / 0.3)' }}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    openFaq === faq.id 
-                      ? 'new-authorisation-gradient-primary text-white' 
-                      : 'bg-new-authorisation-lavender text-new-authorisation-purple'
-                  }`}>
+                  <motion.div 
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      openFaq === faq.id 
+                        ? 'new-authorisation-gradient-primary text-white' 
+                        : 'bg-new-authorisation-lavender text-new-authorisation-purple'
+                    }`}
+                    animate={{ rotate: openFaq === faq.id ? 360 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <HelpCircle className="w-4 h-4" />
-                  </div>
+                  </motion.div>
                   <div className="text-left">
                     <span className="font-medium">{faq.question}</span>
                     <span className="block text-xs text-muted-foreground mt-0.5">{faq.category}</span>
                   </div>
                 </div>
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
-                  openFaq === faq.id 
-                    ? 'new-authorisation-gradient-primary text-white' 
-                    : 'bg-muted text-muted-foreground'
-                }`}>
+                <motion.div 
+                  className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
+                    openFaq === faq.id 
+                      ? 'new-authorisation-gradient-primary text-white' 
+                      : 'bg-muted text-muted-foreground'
+                  }`}
+                  animate={{ rotate: openFaq === faq.id ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
                   {openFaq === faq.id ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                </div>
-              </button>
+                </motion.div>
+              </motion.button>
               
-              <div 
-                className={`new-authorisation-accordion-content ${
-                  openFaq === faq.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                }`}
-              >
-                <div className="px-5 pb-5 pt-0 pl-16">
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {faq.answer}
-                  </p>
-                </div>
-              </div>
-            </div>
+              <AnimatePresence>
+                {openFaq === faq.id && (
+                  <motion.div 
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  >
+                    <div className="px-5 pb-5 pt-0 pl-16">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
 
         {/* CTA Button */}
-        <div className="text-center mt-10">
-          <button className="new-authorisation-btn-primary px-8">
+        <motion.div 
+          className="text-center mt-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.8, duration: 0.4 }}
+        >
+          <motion.button 
+            className="new-authorisation-btn-primary px-8"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+          >
             View All FAQs
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     </section>
   );
