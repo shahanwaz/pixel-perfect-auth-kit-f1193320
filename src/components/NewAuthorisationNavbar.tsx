@@ -34,8 +34,8 @@ const NewAuthorisationNavbar = () => {
       }`}
     >
       <div className="container mx-auto px-4">
-        <div className={`new-authorisation-navbar-inner flex items-center justify-center ${
-          !isScrolled ? 'new-authorisation-glass rounded-full px-6 py-3' : ''
+        <div className={`new-authorisation-navbar-inner flex items-center justify-end ${
+          !isScrolled ? 'new-authorisation-glass rounded-full px-6 py-3' : 'justify-between'
         }`}>
           {/* Logo - Only visible when scrolled */}
           {isScrolled && (
